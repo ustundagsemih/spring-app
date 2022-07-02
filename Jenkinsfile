@@ -1,20 +1,15 @@
-podTemplate(containers: [
-    containerTemplate(
-        name: 'maven', 
-        image: 'maven:3.8.6-jdk-11-slim'
-        )
-  ]) {
-
-    node(POD_LABEL) {
-        stage('Build maven project') {
-            container('maven') {
-                stage('Build app') {
-                    sh '''
-                    mvn clean package -DskipTests"
-                    '''
-                }
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.8.1-adoptopenjdk-11' 
+            args '-v /root/.m2:/root/.m2' 
+        }
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
             }
         }
-
     }
-}c
+}
