@@ -34,7 +34,7 @@ podTemplate(yaml: '''
       container('maven') {
         stage('Build a Maven project') {
           sh '''
-          echo pwd
+          mvn clean package -DskipTests
           '''
         }
       }
@@ -44,7 +44,7 @@ podTemplate(yaml: '''
       container('kaniko') {
         stage('Build a Go project') {
           sh '''
-            /kaniko/executor --context `pwd` --destination bibinwilson/hello-kaniko:1.0
+            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:1.0
           '''
         }
       }
