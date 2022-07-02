@@ -1,14 +1,14 @@
 podTemplate(containers: [
     containerTemplate(
-        name: 'jnlp', 
-        image: 'jenkins/inbound-agent:latest'
+        name: 'maven', 
+        image: 'maven:3.8.6-jdk-11-slim'
         )
   ]) {
 
     node(POD_LABEL) {
-        stage('Get a Maven project') {
-            container('jnlp') {
-                stage('Shell Execution') {
+        stage('Build maven project') {
+            container('maven') {
+                stage('Build app') {
                     sh '''
                     echo "Hello! I am executing shell"
                     '''
@@ -17,4 +17,4 @@ podTemplate(containers: [
         }
 
     }
-}
+}c
