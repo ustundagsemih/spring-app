@@ -10,7 +10,7 @@ podTemplate(containers: [
             container('maven') {
                 stage('Build app') {
                     sh '''
-                    echo "Hello! I am executing shell"
+                    mvn clean package -DskipTests"
                     '''
                 }
             }
