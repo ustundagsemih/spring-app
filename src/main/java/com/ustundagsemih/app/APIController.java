@@ -10,7 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 public class APIController {
 
-	@GetMapping("/api")
+	@GetMapping("/api1")
 	public String index(HttpServletRequest request) {
         String test = request.getQueryString();
         System.out.println(test);
