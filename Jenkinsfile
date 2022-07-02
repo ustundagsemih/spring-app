@@ -28,11 +28,11 @@ podTemplate(yaml: '''
               path: config.json
 ''') {
   node(POD_LABEL) {
-    stage('Get a Maven project') {
+    stage('Get the project and start maven build') {
       
       git branch: 'main', credentialsId: 'GIT_TOKEN', url: 'https://github.com/ustundagsemih/spring-app'
       container('maven') {
-        stage('Build a Maven project') {
+        stage('Building maven project') {
           sh '''
           mvn clean package -DskipTests
           '''
@@ -40,9 +40,9 @@ podTemplate(yaml: '''
       }
     }
 
-    stage('Build Java Image') {
+    stage('Building docker image') {
       container('kaniko') {
-        stage('Build a Go project') {
+        stage('Build a docker project') {
           sh '''
             /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:1.0
           '''
