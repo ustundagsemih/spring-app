@@ -42,7 +42,7 @@ podTemplate(yaml: '''
 
     stage('Building docker image') {
       container('kaniko') {
-        stage('Build a docker prfojecfft1fff') {
+        stage('Build a docker prfojecfft1fffg') {
           sh '''
             /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:1.0
           '''
