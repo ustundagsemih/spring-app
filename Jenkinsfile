@@ -29,10 +29,8 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
     stage('Get a Maven project') {
-      withCredentials([gitUsernamePassword(credentialsId: 'GIT_TOKEN', gitToolName: 'git-tool')]) {
-        git url: 'https://github.com/ustundagsemih/spring-app.git', branch: 'main'
-      }
-      //git url: 'https://github.com/ustundagsemih/spring-app.git', branch: 'main'
+      
+      git branch: 'main', credentialsId: 'GIT_TOKEN', url: 'https://github.com/ustundagsemih/spring-app'
       container('maven') {
         stage('Build a Maven project') {
           sh '''
