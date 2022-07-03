@@ -37,14 +37,14 @@ podTemplate(yaml: '''
           mvn clean package -DskipTests
           '''
         }
-      }
+      }j
     }
 
     stage('Building docker image') {
       container('kaniko') {
         stage('Build af dfofckefrf ffprfoffjecffft1fffg') {
           sh '''
-            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:1.0
+            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:'BUILD_ID'
           '''
         }
       }
