@@ -40,7 +40,7 @@ podTemplate(yaml: '''
     
 
       container('kaniko') {
-        stage('Build a') {
+        stage('Building and pushing docker image to docker hub') {
           sh '''
             /kaniko/executor --context `pwd` --destination ustundagsemih/spring-app:${BUILD_ID}
           '''
@@ -69,11 +69,12 @@ podTemplate(yaml: '''
       container('helm') {
         stage('Adding helm repository') {
           sh 'helm repo add my-custom-repo https://ustundagsemih.github.io/helm-charts/'
+          sh 'helm repo update'
         }
       }
 
       container('helm') {
-        stage('Deploying to beta environtmen') {
+        stage('Deploying to beta environment') {
           sh 'helm upgrade --install my-app-beta my-custom-repo/sample --namespace beta --create-namespace --set image.tag=${BUILD_ID} --set "ingress.hosts[0].host=app-beta.ustundagsemih.com,ingress.hosts[0].paths[0].path=/",ingress.hosts[0].paths[0].pathType=ImplementationSpecific'
         }
       }
