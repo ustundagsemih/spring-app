@@ -75,7 +75,7 @@ podTemplate(yaml: '''
       container('helm') {
         stage('Deploying to beta environment') {
           sh 'helm repo update'
-          sh 'helm upgrade --install my-app-beta my-custom-repo/sample --namespace beta --create-namespace --set image.tag=${BUILD_ID} --set "ingress.hosts[0].host=app-beta.ustundagsemih.com,ingress.hosts[0].paths[0].path=/",ingress.hosts[0].paths[0].pathType=ImplementationSpecific'
+          sh 'helm upgrade --install my-app-beta my-custom-repo/spring-application --namespace beta --create-namespace --set image.tag=${BUILD_ID} --set "ingress.hosts[0].host=app-beta.ustundagsemih.com,ingress.hosts[0].paths[0].path=/",ingress.hosts[0].paths[0].pathType=ImplementationSpecific'
         }
       }
     
@@ -86,7 +86,7 @@ podTemplate(yaml: '''
         container('helm') {
         stage('Deploying to production') {
           sh 'helm repo update'
-          sh 'helm upgrade --install my-app-prod my-custom-repo/sample --namespace prod --create-namespace'
+          sh 'helm upgrade --install my-app-prod my-custom-repo/spring-application --namespace prod --create-namespace'
         }
       }
     }
