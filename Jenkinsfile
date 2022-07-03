@@ -30,7 +30,7 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
     stage('Get the project and start maven build') {
       
-      //git branch: 'main', credentialsId: 'GIT_TOKEN', url: 'https://github.com/ustundagsemih/spring-app'
+      git branch: 'main', credentialsId: 'GIT_TOKEN', url: 'https://github.com/ustundagsemih/spring-app'
       container('maven') {
         stage('Building maven project') {
           sh '''
