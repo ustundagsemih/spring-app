@@ -42,7 +42,7 @@ podTemplate(yaml: '''
       container('kaniko') {
         stage('Building and pushing docker image to docker hub') {
           sh '''
-            /kaniko/executor --context `pwd` --destination ustundagsemih/spring-app:${BUILD_ID}
+            /kaniko/executor --context `pwd` --destination ustundagsemih/spring-app:${BUILD_ID} --destination ustundagsemih/spring-app:latest
           '''
         }
       }
@@ -68,6 +68,8 @@ podTemplate(yaml: '''
   node(POD_LABEL) {
       container('helm') {
         stage('Adding helm repository') {
+          sh 'export build_id=${BUILD_ID}'
+          sh 'echo $build_id'
           sh 'helm repo add my-custom-repo https://ustundagsemih.github.io/helm-charts/'
           sh 'helm repo update'
         }
@@ -85,7 +87,8 @@ podTemplate(yaml: '''
     if(userInput == true) {
         container('helm') {
         stage('Deploying to production') {
-          sh 'helm upgrade --install my-app-prod my-custom-repo/sample --namespace prod --create-namespace --set image.tag={BUILD_ID}'
+          sh 'echo $build_id'
+          sh 'helm upgrade --install my-app-prod my-custom-repo/sample --namespace prod --create-namespace'
         }
       }
     }
