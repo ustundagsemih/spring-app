@@ -37,7 +37,7 @@ podTemplate(yaml: '''
           mvn clean package -DskipTests
           '''
         }
-      }j
+      }
     }
 
     stage('Building and push docker image to dockerhub') {
