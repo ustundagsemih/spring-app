@@ -44,7 +44,7 @@ podTemplate(yaml: '''
       container('kaniko') {
         stage('Build a') {
           sh '''
-            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:'BUILD_ID'
+            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:${BUILD_ID}
           '''
         }
       }
