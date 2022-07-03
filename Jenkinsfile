@@ -28,7 +28,6 @@ podTemplate(yaml: '''
               path: config.json
 ''') {
   node(POD_LABEL) {
-    stage('Get the project and start maven build') {
       
       git branch: 'main', credentialsId: 'GIT_TOKEN', url: 'https://github.com/ustundagsemih/spring-app'
       container('maven') {
@@ -38,17 +37,62 @@ podTemplate(yaml: '''
           '''
         }
       }
-    }
+    
 
-    stage('Building and push docker image to dockerhub') {
       container('kaniko') {
         stage('Build a') {
           sh '''
-            /kaniko/executor --context `pwd` --destination ustundagsemih/hello-kaniko:${BUILD_ID}
+            /kaniko/executor --context `pwd` --destination ustundagsemih/spring-app:${BUILD_ID}
           '''
         }
       }
-    }
+    
 
   }
 }
+
+podTemplate(yaml: '''
+    apiVersion: v1
+    kind: Pod
+    spec:
+      serviceAccount: jenkins
+      containers:
+      - name: helm
+        image: alpine/helm
+        command:
+        - sleep
+        args:
+        - 99d
+      restartPolicy: Never
+''') {
+  node(POD_LABEL) {
+      container('helm') {
+        stage('Adding helm repository') {
+          sh 'helm repo add my-custom-repo https://ustundagsemih.github.io/helm-charts/'
+        }
+      }
+
+      container('helm') {
+        stage('Deploying to beta environtmen') {
+          sh 'helm upgrade --install my-app-beta my-custom-repo/sample --namespace beta --create-namespace --set image.tag=${BUILD_ID} --set "ingress.hosts[0].host=app-beta.ustundagsemih.com,ingress.hosts[0].paths[0].path=/",ingress.hosts[0].paths[0].pathType=ImplementationSpecific'
+        }
+      }
+    
+    
+    def userInput = input(id: 'Proceed', message: 'Promote build?', , parameters: [[$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you agree with this']])
+    
+    if(userInput == true) {
+        container('helm') {
+        stage('Deploying to production') {
+          sh 'helm upgrade --install my-app-prod my-custom-repo/sample --namespace prod --create-namespace --set image.tag={BUILD_ID}'
+        }
+      }
+    }
+    else {
+        sh 'echo Deploy failed'
+    }
+  }
+}
+
+
+
